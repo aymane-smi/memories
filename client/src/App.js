@@ -6,15 +6,17 @@ import Posts from './components/posts/Posts';
 import Form from'./components/forms/Forms';
 import useStyles from './styles';
 import {useDispatch} from 'react-redux';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {getPosts} from './actions/posts';
 
 function App() {
   const classes = useStyles();
+  console.log(classes);
+  const [currentId, setCurrentId] = useState(null);
   const dispatch = useDispatch();
   useEffect(()=>{
     dispatch(getPosts());
-  }, [dispatch]);
+  }, [dispatch, currentId]);
   return (
     <div className="App">
       <Container maxwith="lg">
@@ -25,12 +27,12 @@ function App() {
           </Typography>
         </AppBar>
         <Grow in>
-          <Grid container justifyContent='center' alignItems='stretch' spacing={3}>
+          <Grid container justifyContent='center' className={classes.mainContainer} alignItems='stretch' spacing={3}>
             <Grid item xs={12} sm={7}>
-              <Posts />
+              <Posts setCurrentId={setCurrentId}/>
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Form />
+              <Form currentId={currentId} setCurrentId={setCurrentId}/>
             </Grid>
           </Grid>
         </Grow>
