@@ -11,7 +11,7 @@ const mongoose          = require("mongoose"),
           },
           createAt:{
               type: Date,
-              default: Date.now()
+              default: Date.now
           }
       });
 
