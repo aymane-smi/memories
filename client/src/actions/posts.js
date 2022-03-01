@@ -5,15 +5,18 @@ export const getPosts = ()=>(async (dispatch)=>{
         const {data} = await api.fetchPosts();
         dispatch({type: "FETCH_URL", payload: data})
     }catch(err){
+        console.log("inside the getpots action");
+        console.log(err);
         console.log(err.message);
     }
 });
 
 export const createPost = (newPost)=>(async (dispatch)=>{
     try{
-        const {data} = await api.createPost(newPost);
+        let {data} = await api.createPost(newPost);
         dispatch({type: "CREATE", payload: data});
     }catch(err){
+        console.log(err);
         console.log(err.message);
     }
 });

@@ -3,7 +3,7 @@ export default (state = [], action)=>{
         case 'FETCH_URL':
             return action.payload.response;
         case 'CREATE':
-            return [...state, action.payload];
+            return [...state, action.payload?.post];
         case 'UPDATE':
             return state.map((post)=> post._id === action.payload._id ? action.payload : post);
         case 'DELETE':
