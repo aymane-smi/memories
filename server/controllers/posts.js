@@ -17,7 +17,7 @@ exports.getPosts = async (req, res)=>{
 
 exports.postCreation = async (req, res)=>{
     req.body.tags = req.body.tags.split(' ');
-    let newPost = new post(req.body);
+    let newPost = new post({...req.body, creator: req.userId});
     try{
         let savingPost = await newPost.save();
         //created successfully
@@ -63,17 +63,24 @@ exports.postDelete = async (req, res)=>{
 
 
 exports.postLike = async (req, res)=>{
-    const id = req.params.id;
+    const {id} = req.params;
     if(!mongoose.Types.ObjectId.isValid(id))
         res.status(404).json({
             err: "id not found!"
         });
-    const {likeCount} = await post.findById(id);
-    const updatedPost = await post.findByIdAndUpdate(id, {likeCount: likeCount+1}, {new: true});
+    if(!req.userId)
+        res.status(401).json({
+            message: "UnAuthenticated" 
+        });
+    let Post = await post.findById(id);
+    const index = Post.likes.findIndex((i)=> i === String(req.userId));
+    if(index === -1)
+        Post.likes.push(req.userId);
+    else
+        Post.likes = Post.likes.filter((i)=> i !== req.userId);
+    const updatedPost = await post.findByIdAndUpdate(id, Post);
     res.status(200).json({
         message: "add like to post with success",
-        previousCount: likeCount,
-        newCount: updatedPost.likeCount,
         post: updatedPost
     });
 }

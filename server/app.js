@@ -1,10 +1,12 @@
+const x = require("dotenv").config();
 const express    = require("express"),
       cors       = require("cors"),
       mongoose   = require("mongoose"),
       bodyParser = require("body-parser"),
       app        = express(),
       PORT       = process.env.PORT || 8081,
-      posts      = require("./routes/posts");
+      posts      = require("./routes/posts"),
+      user       = require('./routes/user');
 
 app.use(cors());
 app.use(bodyParser.json({limit: "30mb", extended: true})); 
@@ -23,5 +25,6 @@ mongoose.connect("mongodb://localhost/memories", {
 
 
 app.use("/api/post/", posts);
+app.use("/api/user/", user);
 
 // mongoose.set('useFindAndModify', false);
